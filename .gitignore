@@ -1,0 +1,6 @@
+node_modules/
+*.sublime*
+dist/
+public/components/
+apidoc/
+config/config.js

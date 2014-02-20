@@ -1,0 +1,37 @@
+extends layout
+
+block content
+	div(class='container')
+		form(action='/createapp', method='POST', class='form-signin', role='form')
+			h2(class='form-signin-header') Register your application
+			input(type='text', class='form-control', placeholder='MyNewApp', name='appName', required autofocus)
+			input(type='text', class='form-control', placeholder='App role', name='role', required)
+			//- Combo box row
+			//- div.row
+			//- 	div.col-md-4
+			//- 		div.checkbox
+			//- 			label Account Read
+			//- 				input(type='checkbox', value='1', id='acc_r', name='scopes')
+			//- 		div.checkbox
+			//- 			label Account Write
+			//- 				input(type='checkbox', value='2', id='acc_w', name='scopes')
+			//- 		div.checkbox
+			//- 			label Stats Read
+			//- 				input(type='checkbox', value='64', id='stats_r', name='scopes')
+			//- 	div.col-md-4
+			//- 		div.checkbox
+			//- 			label Event Read
+			//- 				input(type='checkbox', value='4', id='event_r', name='scopes')
+			//- 		div.checkbox
+			//- 			label Event Write
+			//- 				input(type='checkbox', value='8', id='event_2', name='scopes')
+			//- 	div.col-md-4
+			//- 		div.checkbox
+			//- 			label Session Read
+			//- 				input(type='checkbox', value='16', id='ses_r', name='scopes')
+			//- 		div.checkbox
+			//- 			label Session Write
+			//- 				input(type='checkbox', value='32', id='ses_w', name='scopes')
+					
+			button(class='btn btn-lg btn-primary btn-block', type='submit', value='Register')
+				|Register
