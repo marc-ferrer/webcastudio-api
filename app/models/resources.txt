@@ -1,0 +1,65 @@
+
+module.exports.event_resource = {
+	id						: Number,
+	name					: String,
+	description		: String,
+	start_date 		: String,
+	finishing_date: String,
+	status				: String,
+	languages			: [language_resources]
+}
+
+module.exports.language_resources = {
+	id		: Number,
+	name	: String,
+	label	: String
+}
+
+module.exports.session_resource = {
+	id						: Number,
+	name					: String,
+	app_version		: String,
+	template_id		: Number, //???
+	starting_date	: String,
+	finishing_date: String,
+	event_id			: Number,
+	live_status		: String,
+	od_status			: String
+}
+
+module.exports.user_resource = {
+	id						: Number,
+	firstname			: String,
+	lastname			: String,
+	email					: String,
+	organitzation	: String,
+	referer				: String
+}
+
+//stats retorna una array de stats_resource
+module.exports.stats_resource = {
+	user				: user_resource,
+	first_time	: String,
+	last_update	: String,
+	session_id	: Number,
+	event_id		: Number,
+	language_id	: Number,
+	type				: String, //live | od,
+	acces				: String,
+	platform		: String,
+	browser			: String
+}
+
+
+module.exports.program_resource = {
+	time_settings	: {
+		date_format	: String,
+		time_format	: String,
+		timezone		: String
+	},
+	languages			: {
+		id: {
+			// XML to object
+		}
+	}
+}
