@@ -1,10 +1,9 @@
-var mongoose = require('mongoose'),
-		ClientApp = mongoose.model('ClientApp'),
+var ClientApp = require('../../app/models/clientApp'),
 		SignatureV1 = require('../../app/signatures/signaturev1'),
 		moment = require('moment');
 
 exports.checkRequest = function (req, res, next) {
-	console.log('checking request');
+	console.log('checking request', req.headers);
 	var headers = req.headers;
 	var date = headers['date'],
 		publicKey = headers['publickey'],
@@ -29,10 +28,9 @@ exports.checkRequest = function (req, res, next) {
 	}
 	switch(headers['signatureversion']){
 		case 'v1':
-			console.log()
 			ClientApp.find(publicKey, function(app){
 				var signatureV1 = new SignatureV1();
-				var signToCheck = signatureV1.generateSignature(publicKey, app.appSecret, date);
+				var signToCheck = signatureV1.generateSignature(publicKey, app.secretKey, date);
 				if(signToCheck !== signature){
 					console.log('Bad signature');
 					res.send(401, 'Bad signature');
