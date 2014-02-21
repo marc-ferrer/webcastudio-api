@@ -49,7 +49,7 @@ ClientApp.register = function(){
 		};
 		// throw err;
 	});
-	var sql = 'INSERT INTO ws_api_test.Client_App (app_id, app_key, secret_key, acc_id, role) VALUES (?)';
+	var sql = 'INSERT INTO Client_App (app_id, app_key, secret_key, acc_id, role) VALUES (?)';
 	var date = new Date();
 	var utcDate = date.toUTCString();
 	var values = [config.appKey, config.secretKey, config.accId, config.role, utcDate];
@@ -75,8 +75,7 @@ ClientApp.find = function(appKey, handler) {
 		console.log('error:',err);
 		// throw err;
 	});
-	console.log('appkey----------',appKey);
-	var sql = 'SELECT * FROM ws_api_test.Client_App WHERE app_key = ?';
+	var sql = 'SELECT * FROM Client_App WHERE app_key = ?';
 	connection.query(sql, appKey, function(err, results){
 		console.log('results db select:',results);
 		var clientApp = new ClientApp(results[0]);

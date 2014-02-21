@@ -38,7 +38,7 @@ EventResource.get = function(event_id, handler) {
 	});
 	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, ';
 	var langInfo = 'l.event_point_id as lang_id, l.name as lang_name, l.description as lang_label ';
-	var sql = 'SELECT '+eventInfo+langInfo+'FROM ws_api_test.event as e JOIN ws_api_test.event_point as l USING(event_id) WHERE event_id = ?';
+	var sql = 'SELECT '+eventInfo+langInfo+'FROM event as e JOIN ws_api_test.event_point as l USING(event_id) WHERE event_id = ?';
 	connection.query(sql, event_id, function(err, result){
 		var eventResult = EventResource._parseListResult(result);
 		handler(eventResult[0]);
@@ -53,7 +53,7 @@ EventResource.list = function(accId, handler) {
 	});
 	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, ';
 	var langInfo = 'l.event_point_id as lang_id, l.name as lang_name, l.description as lang_label ';
-	var sql = 'SELECT '+eventInfo+langinfo+'FROM ws_api_test.event as e JOIN ws_api_test.event_point as l USING(event_id) WHERE acc_id = ?';
+	var sql = 'SELECT '+eventInfo+langinfo+'FROM event as e JOIN ws_api_test.event_point as l USING(event_id) WHERE acc_id = ?';
 	connection.query(sql, accId, function(err, results){
 		console.log(results);
 		//create new event resource list with results.
