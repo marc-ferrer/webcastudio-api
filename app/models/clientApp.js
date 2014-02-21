@@ -1,18 +1,8 @@
-var mongoose = require('mongoose'),
-	Schema = mongoose.Schema,
-	crypto = require('crypto'),
+var crypto = require('crypto'),
 	hash = require('../util/hash.js'),
 	uid2 = require('uid2'),
 	mysql = require('mysql'),
 	mysqlConfig = require('../../config/config').mySql;
-
-var AppSchema = new Schema({
-	appId			: String,
-	appSecret	: String,
-	accId			: String,
-	role			: String,
-	createdAt	: { type: Date, default: Date.now }
-});
 
 function ClientApp (config) {
 	this.appId = config.appId || config.app_id;
@@ -23,28 +13,28 @@ function ClientApp (config) {
 	this.createdAt = config.createdAt || config.created_at;
 }
 
-AppSchema.statics.register = function(user, role){
-	var ClientApp = this;
-	//TODO: abstract generate secret process
-	var uid = uid2(16);
-	var date = new Date();
-	var stringToHash = user.hash+user.email+date;
-	hash = crypto.createHash('sha1').update(stringToHash + uid).digest('hex');
-	console.log('clientApp Id: ', uid);
-	console.log('clientApp Secret: ', hash);
+// AppSchema.statics.register = function(user, role){
+// 	var ClientApp = this;
+// 	//TODO: abstract generate secret process
+// 	var uid = uid2(16);
+// 	var date = new Date();
+// 	var stringToHash = user.hash+user.email+date;
+// 	hash = crypto.createHash('sha1').update(stringToHash + uid).digest('hex');
+// 	console.log('clientApp Id: ', uid);
+// 	console.log('clientApp Secret: ', hash);
 
-	ClientApp.create({
-		appId			: uid,
-		appSecret	: hash,
-		accId			: user.email,
-		role			: role},
-		function(err, user){
-			if(err){
-				throw err;
-			}
-		}
-	);
-};
+// 	ClientApp.create({
+// 		appId			: uid,
+// 		appSecret	: hash,
+// 		accId			: user.email,
+// 		role			: role},
+// 		function(err, user){
+// 			if(err){
+// 				throw err;
+// 			}
+// 		}
+// 	);
+// };
 
 //TODO: implement generate secret
 
@@ -54,8 +44,9 @@ ClientApp.register = function(){
 
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
-		console.log('DB connection error', mysqlConfig.console);
-		console.log(err);
+		if (err) {
+			console.log(err);
+		};
 		// throw err;
 	});
 	var sql = 'INSERT INTO ws_api_test.Client_App (app_id, app_key, secret_key, acc_id, role) VALUES (?)';
@@ -76,6 +67,8 @@ ClientApp.register = function(){
  * @param  {Function} handler handler function
  * @return {ClientApp}         returns a ClientApp object.
  */
+
+//TODO: find out wether it's necessary to close mysql connection or not.
 ClientApp.find = function(appKey, handler) {
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
@@ -91,13 +84,4 @@ ClientApp.find = function(appKey, handler) {
 	});
 };
 
-AppSchema.statics.find = function(appKey, handler){
-	this.findOne({appId: appKey}, function(err, app){
-		if(err) throw err;
-		if(!app) throw new Error('app not found');
-		handler(app);
-	});
-};
-
 module.exports = ClientApp;
-//mongoose.model('ClientApp', AppSchema);
