@@ -36,12 +36,19 @@ function ClientApp (config) {
 // 	);
 // };
 
-//TODO: implement generate secret
+ClientApp._generateSecret = function(psk){
+	psk = psk || uid2(16);
+	var hmac = crypto.createHmac('sha1',  psk);
+	hmac.setEncoding('hex');
+	hmac.write(uid+date.now());
+	hmac.end();
+	return hmac.read();
+};
 
-ClientApp.register = function(){
+ClientApp.register = function(accId, role, psk){
 	var uid = uid2(16);
 	var date = new Date();
-
+	var secret = ClientApp._generateSecret(psk);
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
 		if (err) {
@@ -50,15 +57,15 @@ ClientApp.register = function(){
 		// throw err;
 	});
 	var sql = 'INSERT INTO Client_App (app_id, app_key, secret_key, acc_id, role) VALUES (?)';
-	var date = new Date();
 	var utcDate = date.toUTCString();
-	var values = [config.appKey, config.secretKey, config.accId, config.role, utcDate];
-	connection.query(sql, config.appId, values, function(err, result){
+	var values = [uid, secret, accId, role, utcDate];
+	connection.query(sql, values, function(err, result){
 		if (err){
 			//throw err;
-			console.log('Error inserting client app into DB');
+			console.log('Error inserting client app into DB', err);
 		}
 	});
+	//TODO: returns new ClientApp object.
 };
 
 /**
