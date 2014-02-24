@@ -5,9 +5,9 @@ var resources = require('../models/resource'),
 exports.list = function(req, res){
 	//TODO: check req params
 	var accesLevel = scopesConfig.scopes['EVENT_READ'];
-	// if ((scopesConfig.appRoles[req.clientApp.role] & accesLevel) !== accesLevel){
-	// 	res.send(403, 'This appKey doesn\'t have permission to acces to this information');
-	// }
+	if ((scopesConfig.appRoles[req.clientApp.role] & accesLevel) !== accesLevel){
+		res.send(403, 'This appKey doesn\'t have permission to acces to this information');
+	}
 	EventResource.list(req.clientApp.accId, function(eventsList){
 		var objs = [];
 		for (var key in eventResults){

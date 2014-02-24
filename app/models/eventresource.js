@@ -38,8 +38,9 @@ EventResource.prototype.addLanguage = function(lang){
 EventResource.get = function(event_id, handler) {
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
-		console.log('DB connection error', mysqlConfig.console);
-		console.log(err);
+		if (err) {
+			console.log('DB connection error', mysqlConfig.console);
+		};
 		// throw err;
 	});
 	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, ';
@@ -60,14 +61,15 @@ EventResource.get = function(event_id, handler) {
 EventResource.list = function(accId, handler) {
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
-		console.log('DB connection error');
+		if (err) {
+			console.log('DB connection error');
+		};
 		// throw err;
 	});
 	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, ';
 	var langInfo = 'l.event_point_id as lang_id, l.name as lang_name, l.description as lang_label ';
 	var sql = 'SELECT '+eventInfo+langinfo+'FROM event as e JOIN ws_api_test.event_point as l USING(event_id) WHERE acc_id = ?';
 	connection.query(sql, accId, function(err, results){
-		console.log(results);
 		//create new event resource list with results.
 		var eventResults = EventResource._parseListResult(results);
 		//TODO: implement resourceCollection class with toObject method

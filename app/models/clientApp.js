@@ -91,12 +91,13 @@ ClientApp.register = function(accId, role, psk){
 ClientApp.find = function(appKey, handler) {
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
-		console.log('error:',err);
+		if (err) {
+			console.log('error:',err);
+		};
 		// throw err;
 	});
 	var sql = 'SELECT * FROM Client_App WHERE app_key = ?';
 	connection.query(sql, appKey, function(err, results){
-		console.log('results db select:',results);
 		var clientApp = new ClientApp(results[0]);
 		handler(clientApp);
 	});

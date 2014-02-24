@@ -9,7 +9,6 @@ var ClientApp = require('../../app/models/clientApp'),
  * @param  {Function} next next
  */
 exports.checkRequest = function (req, res, next) {
-	console.log('checking request', req.headers);
 	var headers = req.headers;
 	var date = headers['date'],
 		publicKey = headers['publickey'],
