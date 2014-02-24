@@ -4,15 +4,16 @@ module.exports = function(app, passport){
 			login = require('../app/controllers/login.js'),
 			createapp = require('../app/controllers/createapp'),
 			auth = require('../app/controllers/auth.js'),
-			userAuth = require('./middlewares/userAuth'),
 			apiAuth = require('./middlewares/apiauth'),
 			eventsController = require('../app/controllers/events');
 
 	// home route
 	app.get('/login', login.login);
 	app.post('/login', auth.login);
-	app.get('/createapp', userAuth.isAuthenticatedUser, createapp.createApp);
-	app.post('/createapp', userAuth.isAuthenticatedUser, createapp.registerApp);
+
+	//TODO: uncomment when create app api feature is ready
+	// app.get('/createapp', userAuth.isAuthenticatedUser, createapp.createApp);
+	// app.post('/createapp', userAuth.isAuthenticatedUser, createapp.registerApp);
 
 
 	//TODO: Apps manager API
