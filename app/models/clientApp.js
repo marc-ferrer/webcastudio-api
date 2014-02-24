@@ -36,6 +36,11 @@ function ClientApp (config) {
 // 	);
 // };
 
+/**
+ * generates a secret key.
+ * @param  {String} psk optional parameter that can be used to encrypt the generated secret Key.
+ * @return {String}     Secret Key generated.
+ */
 ClientApp._generateSecret = function(psk){
 	psk = psk || uid2(16);
 	var hmac = crypto.createHmac('sha1',  psk);
@@ -45,6 +50,13 @@ ClientApp._generateSecret = function(psk){
 	return hmac.read();
 };
 
+/**
+ * registers a new App in the DB.
+ * @param  {Number} accId Id of the account registering the App.
+ * @param  {String} role  Client App role defined at scopesconfig.js.
+ * @param  {Strign} psk   optional parameter that can be used to encrypt the generated Key.
+ * @return {ClientApp}    Client App registered.
+ */
 ClientApp.register = function(accId, role, psk){
 	var uid = uid2(16);
 	var date = new Date();

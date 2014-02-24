@@ -29,6 +29,12 @@ EventResource.prototype.addLanguage = function(lang){
 	}
 };
 
+/**
+ * Get an event resource
+ * @param  {Number} event_id Id of the event.
+ * @param  {Function} handler  handler function 1 parameter neded.
+ * @return {EventResource}     returns the event resource via handler.
+ */
 EventResource.get = function(event_id, handler) {
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
@@ -45,6 +51,12 @@ EventResource.get = function(event_id, handler) {
 	});
 };
 
+/**
+ * list all events of the given account.
+ * @param  {Number} accId   Id of the account.
+ * @param  {Function} handler handler function.
+ * @return {Array}          Array of EventResources.
+ */
 EventResource.list = function(accId, handler) {
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){

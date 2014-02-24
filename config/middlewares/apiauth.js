@@ -2,6 +2,12 @@ var ClientApp = require('../../app/models/clientApp'),
 		SignatureV1 = require('../../app/signatures/signaturev1'),
 		moment = require('moment');
 
+/**
+ * Checks request headers and signature
+ * @param  {Object}   req  request
+ * @param  {Object}   res  response
+ * @param  {Function} next next
+ */
 exports.checkRequest = function (req, res, next) {
 	console.log('checking request', req.headers);
 	var headers = req.headers;
