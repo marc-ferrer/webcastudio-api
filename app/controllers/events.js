@@ -13,7 +13,6 @@ exports.list = function(req, res){
 		for (var key in eventsList){
 			objs.push(eventsList[key].toObject());
 		}
-		console.log('results array:',objs);
 		res.json(200, objs);
 	});
 }
@@ -24,7 +23,6 @@ exports.get = function(req, res) {
 		res.send(403, 'This appKey doesn\'t have permission to acces to this information');
 	}
 	EventResource.get(req.params.eventId, function(result){
-		console.log(JSON.stringify(result.toObject()));
 		res.json(200, result.toObject());
 	});
 }
