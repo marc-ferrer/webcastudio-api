@@ -1,15 +1,7 @@
-module.exports = function(app, passport){
+module.exports = function(app){
 
-	var home = require('../app/controllers/home'),
-			login = require('../app/controllers/login.js'),
-			createapp = require('../app/controllers/createapp'),
-			auth = require('../app/controllers/auth.js'),
-			apiAuth = require('./middlewares/apiauth'),
+	var apiAuth = require('./middlewares/apiauth'),
 			eventsController = require('../app/controllers/events');
-
-	// home route
-	app.get('/login', login.login);
-	app.post('/login', auth.login);
 
 	//TODO: uncomment when create app api feature is ready
 	// app.get('/createapp', userAuth.isAuthenticatedUser, createapp.createApp);
@@ -63,8 +55,6 @@ module.exports = function(app, passport){
 	//
 	//poder filtrar les consultes de event program per idioma
 	//----------------------------------------------//
-	// app.get('/getapp', apptest.findApp);
-	app.get('/*',home.index);
 
 	// //Sample
 	// app.get('event', apiAuth.checkRequest, function(req, res, next){

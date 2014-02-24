@@ -1,6 +1,6 @@
 var express = require('express');
 
-module.exports = function(app, config, passport) {
+module.exports = function(app, config) {
   app.configure(function () {
 	app.use(express.compress());
 	app.use(express.static(config.root + '/public'));
@@ -12,8 +12,6 @@ module.exports = function(app, config, passport) {
 	app.use(express.bodyParser());
 	app.use(express.cookieParser());
 	app.use(express.session({secret: 'vancast-key'}));
-	app.use(passport.initialize());
-	app.use(passport.session());
 	app.use(express.methodOverride());
 	app.use(app.router);
 	app.use(function(req, res) {

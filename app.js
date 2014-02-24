@@ -1,6 +1,5 @@
 var express = require('express'),
   fs = require('fs'),
-  passport = require('passport'),
   config = require('./config/config');
 
 // winston.remove(winston.transports.Console);
@@ -14,10 +13,9 @@ fs.readdirSync(modelsPath).forEach(function (file) {
   }
 });
 
-require('./config/passport')(passport);
 var app = express();
 
-require('./config/express')(app, config, passport);
-require('./config/routes')(app, passport);
+require('./config/express')(app, config);
+require('./config/routes')(app);
 
 app.listen(config.port);
