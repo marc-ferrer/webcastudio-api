@@ -29,13 +29,13 @@ function buildAppScopes(scopes, roles){
 		//TODO: Faliure tolerance
 		if(roles[role] === '*'){
 			for(var key in scopes){
-				appRole.bitMask+= socpes[role];
+				appRole.bitMask+= scopes[role];
 			}
 		}else if(roles[role] instanceof String){
 			appRole.bitMask = scopes[roles[role]];
 		}else if(roles[role] instanceof Array){
 			for(var index= 0; index < roles[role].length; index++){
-				appRole.bitMask+= roles[role][index];
+				appRole.bitMask+= scopes[roles[role][index]];
 			}
 		} else {
 			continue;

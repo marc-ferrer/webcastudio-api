@@ -5,23 +5,24 @@ var resources = require('../models/resource'),
 exports.list = function(req, res){
 	//TODO: check req params
 	var accesLevel = scopesConfig.scopes['EVENT_READ'];
-	if ((scopesConfig.appRoles[req.clientApp.role] & accesLevel) !== accesLevel){
+	if ((scopesConfig.appRoles[req.clientApp.role].bitMask & accesLevel) !== accesLevel){
 		res.send(403, 'This appKey doesn\'t have permission to acces to this information');
 	}
 	EventResource.list(req.clientApp.accId, function(eventsList){
 		var objs = [];
-		for (var key in eventResults){
-			objs.push(eventResults[key].toObject());
+		for (var key in eventsList){
+			objs.push(eventsList[key].toObject());
 		}
+		console.log('results array:',objs);
 		res.json(200, objs);
 	});
 }
 
 exports.get = function(req, res) {
 	var accesLevel = scopesConfig.scopes['EVENT_READ'];
-	// if ((scopesConfig.appRoles[req.clientApp.role] & accesLevel) !== accesLevel){
-	// 	res.send(403, 'This appKey doesn\'t have permission to acces to this information');
-	// }
+	if ((scopesConfig.appRoles[req.clientApp.role].bitMask & accesLevel) !== accesLevel){
+		res.send(403, 'This appKey doesn\'t have permission to acces to this information');
+	}
 	EventResource.get(req.params.eventId, function(result){
 		console.log(JSON.stringify(result.toObject()));
 		res.json(200, result.toObject());
