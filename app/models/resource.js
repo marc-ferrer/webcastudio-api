@@ -7,7 +7,7 @@ Resource.prototype.toObject = function() {
 	for (var key in this){
 		if (this[key] instanceof Function) {
 			continue;
-		};
+		}
 		//prop name that do not start with "_"
 		if (/^(?!_.*)/.test(key)) {
 			if (this[key] instanceof Array) {
@@ -17,8 +17,8 @@ Resource.prototype.toObject = function() {
 						obj[key].push(this[key][i].toObject());
 					}else{
 						obj[key].push(this[key][i]);
-					};
-				};
+					}
+				}
 			}else{
 				if(this[key] === undefined || this[key] === null){
 					this[key] = null;
@@ -26,10 +26,10 @@ Resource.prototype.toObject = function() {
 					obj[key] = this[key].toObject();
 				}else{
 					obj[key] = this[key];
-				};
-			};
-		};
-	};
+				}
+			}
+		}
+	}
 	return obj;
 };
 

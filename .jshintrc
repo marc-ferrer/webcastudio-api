@@ -1,0 +1,11 @@
+{
+	"strict" : false,
+	"smarttabs" : true,
+	"loopfunc": true,
+	"shadow": true,
+	"node" : true,
+	"globals" 	: {
+		"require" : true,
+		"module" : true
+	}
+}

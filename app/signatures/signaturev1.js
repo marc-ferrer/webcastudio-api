@@ -1,10 +1,10 @@
 var crypto = require('crypto'),
-	util = require('util')
+	util = require('util'),
 	abstractSignature = require('./abstractsignature');
 //TODO: implement abstractSignature extend it.
 function SignatureV1 () {
 	this.algorithm = 'sha1';
-	this.encoding = 'hex'
+	this.encoding = 'hex';
 }
 util.inherits(SignatureV1, abstractSignature);
 

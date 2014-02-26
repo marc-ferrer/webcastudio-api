@@ -10,8 +10,8 @@ function SessionResource (config) {
 	this.appVersion = config.appVersion || 'not defined';
 	this.templateId = config.templateId;
 	this.starginDate = config.stargingDate;
-	this.finishingDate = config.finishingDate
-	this.eventId = config.eventId
+	this.finishingDate = config.finishingDate;
+	this.eventId = config.eventId;
 	this.liveStatus = config.liveStatus || '';
 	this.odStatus = config.odStatus || [];
 }
@@ -23,7 +23,7 @@ SessionResource.get = function(){
 	connection.connect(function(err){
 		if (err) {
 			console.log('DB connection error');
-		};
+		}
 		// throw err;
 	});
 
@@ -34,7 +34,7 @@ var getLiveInfo = function(session, handler){
 	connectionEventsDB.connect(function(err){
 		if (err) {
 			console.log('connection to events DB error');
-		};
+		}
 	});
 	var flagInfo = '* ';
 	var sql2 = 'SELECT '+flagInfo+'FROM Webcast_Flags where part_id = ?';
@@ -49,11 +49,11 @@ var getLiveInfo = function(session, handler){
 						session.liveStatus = 'live_open';
 					}else{
 						session.liveStatus = 'live_publishing';
-					};
+					}
 			}
 		}else{
 			session.liveStatus = 'off';
-		};
+		}
 		handler(session);
 	});
 };
@@ -72,11 +72,11 @@ var getOdInfo = function(connection, session, handler){
 					obj.status = 'published';
 				}else{
 					obj.status = 'pending';
-				};
+				}
 				session.odStatus.push(obj);
-			};
+			}
 			handler(session);
-		};
+		}
 	});
 };
 
@@ -85,12 +85,12 @@ SessionResource.list = function(eventId, handler){
 	connection.connect(function(err){
 		if (err) {
 			console.log('DB connection error');
-		};
+		}
 	});
 	var sessionList = [];
 	var counter = 0;
 	var sessionInfo = 'part_id as id, name as name, kernel_version as appVersion, theme_id templateId, starting_date as startingDate, finishing_date as finishingDate, event_id as eventId ';
-	var sql = 'SELECT '+sessionInfo+'FROM event_part where event_id = ?'
+	var sql = 'SELECT '+sessionInfo+'FROM event_part where event_id = ?';
 	connection.query(sql, eventId, function(err, results){
 		//TODO: Check live & OD status.
 		var liveInfo = '';
@@ -103,10 +103,10 @@ SessionResource.list = function(eventId, handler){
 					counter++;
 					if (counter === results.length) {
 						handler(sessionList);
-					};
+					}
 				});
 			});
-		};
+		}
 	});
 };
 

@@ -1,5 +1,4 @@
 var crypto = require('crypto'),
-	hash = require('../util/hash.js'),
 	uid2 = require('uid2'),
 	mysql = require('mysql'),
 	mysqlConfig = require('../../config/config').mySql;
@@ -41,11 +40,11 @@ function ClientApp (config) {
  * @param  {String} psk optional parameter that can be used to encrypt the generated secret Key.
  * @return {String}     Secret Key generated.
  */
-ClientApp._generateSecret = function(psk){
+ClientApp._generateSecret = function(uid, psk){
 	psk = psk || uid2(16);
 	var hmac = crypto.createHmac('sha1',  psk);
 	hmac.setEncoding('hex');
-	hmac.write(uid+date.now());
+	hmac.write(uid+Date.now());
 	hmac.end();
 	return hmac.read();
 };
@@ -60,12 +59,12 @@ ClientApp._generateSecret = function(psk){
 ClientApp.register = function(accId, role, psk){
 	var uid = uid2(16);
 	var date = new Date();
-	var secret = ClientApp._generateSecret(psk);
+	var secret = ClientApp._generateSecret(uid ,psk);
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
 		if (err) {
 			console.log(err);
-		};
+		}
 		// throw err;
 	});
 	var sql = 'INSERT INTO Client_App (app_id, app_key, secret_key, acc_id, role) VALUES (?)';
@@ -93,7 +92,7 @@ ClientApp.find = function(appKey, handler) {
 	connection.connect(function(err){
 		if (err) {
 			console.log('error:',err);
-		};
+		}
 		// throw err;
 	});
 	var sql = 'SELECT * FROM Client_App WHERE app_key = ?';

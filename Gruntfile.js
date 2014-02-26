@@ -17,6 +17,12 @@ module.exports = function (grunt) {
         file: 'app.js'
       }
     },
+    jshint: {
+      src: ['Gruntfile.js', 'app/**/*.js'],
+      options: {
+          jshintrc: '.jshintrc'
+      }
+    },
     watch: {
       options: {
         nospawn: true,
@@ -43,27 +49,30 @@ module.exports = function (grunt) {
           debug: true
         }
       }
-    }
+    },
   });
 
   grunt.config.requires('watch.js.files');
   files = grunt.config('watch.js.files');
-  files = grunt.file.expand(files);
+  files = grunt.file.expand(files); 
 
   grunt.registerTask('delayed-livereload', 'Live reload after the node server has restarted.', function () {
     var done = this.async();
     setTimeout(function () {
       request.get('http://localhost:' + reloadPort + '/changed?files=' + files.join(','),  function(err, res) {
           var reloaded = !err && res.statusCode === 200;
-          if (reloaded)
+          if (reloaded){
             grunt.log.ok('Delayed live reload successful.');
-          else
+          }else{
             grunt.log.error('Unable to make a delayed live reload.');
+          }
           done(reloaded);
         });
     }, 500);
   });
 
-  grunt.registerTask('default', ['develop', 'watch']);
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+
+  grunt.registerTask('default', ['jshint', 'develop', 'watch']);
   grunt.registerTask('docs', ['apidoc']);
 };

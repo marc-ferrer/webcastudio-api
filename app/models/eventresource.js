@@ -7,7 +7,7 @@ var util = require('util'),
 function EventResource (config) {
 	this.id = config.id;
 	this.name = config.name || config.long_name;
-	this.description = config.description
+	this.description = config.description;
 	this.starting_date = config.starting_date;
 	this.finishing_date = config.finishing_date;
 	this.status	= config.status;
@@ -40,7 +40,7 @@ EventResource.get = function(event_id, handler) {
 	connection.connect(function(err){
 		if (err) {
 			console.log('DB connection error', mysqlConfig.console);
-		};
+		}
 		// throw err;
 	});
 	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, ';
@@ -63,7 +63,7 @@ EventResource.list = function(accId, handler) {
 	connection.connect(function(err){
 		if (err) {
 			console.log('DB connection error');
-		};
+		}
 		// throw err;
 	});
 	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, ';
