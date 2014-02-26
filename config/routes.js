@@ -1,7 +1,8 @@
 module.exports = function(app){
 
 	var apiAuth = require('./middlewares/apiauth'),
-			eventsController = require('../app/controllers/events');
+			eventsController = require('../app/controllers/events'),
+			sessionsController = require('../app/controllers/sessions');
 
 	//TODO: uncomment when create app api feature is ready
 	// app.get('/createapp', userAuth.isAuthenticatedUser, createapp.createApp);
@@ -39,13 +40,23 @@ module.exports = function(app){
 	 * @apiName asdasgf
 	 * @apiGroup Stats
 	 *
-	 * @apiParam {Number} event_id Event unic ID.
+	 * @apiParam {Number} eventId Event unic ID.
 	 *
 	 * @apiSuccess {stats_resource} result returns event statistics.
 	 *
 	 */
 	app.get('/events/:eventId/stats', apiAuth.checkRequest, function(){});
-	app.get('/events/:eventId/sessions/list', apiAuth.checkRequest, function(){});
+
+	/**
+	 * @api {get} /events/:eventId/sessions/list list
+	 * @apiName my api
+	 * @apiGroup Stats
+	 *
+	 * @apiParam {Number} eventId Event unic ID.
+	 *
+	 * @apiSucces {String} returns al sessions of the given event ID.
+	 */
+	app.get('/events/:eventId/sessions/list', apiAuth.checkRequest, sessionsController.list);
 	app.get('/events/:eventId/sessions/:sessionId', apiAuth.checkRequest, function(){});
 	//definir parametres opcionals a la ruta de stats
 	//els parametres serien: session, point(idioma) i live | OD
