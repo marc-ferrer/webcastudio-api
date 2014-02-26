@@ -1,10 +1,12 @@
 var express = require('express'),
   fs = require('fs'),
-  config = require('./config/config');
+  config = require('./config/config'),
+  winston = require('winston');
 
-// winston.remove(winston.transports.Console);
-// winston.add(winston.transports.Console, {colorize: 'true'})
-// winston.log('info', 'winston logger initiated');
+winston.remove(winston.transports.Console);
+winston.add(winston.transports.Console, {colorize: 'true'})
+winston.log('info', 'winston logger initiated');
+// winston.add(winston.transports.File, {timestamp: 'true', filename: './autopresentation.log'});
 
 var modelsPath = __dirname + '/app/models';
 fs.readdirSync(modelsPath).forEach(function (file) {
