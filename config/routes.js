@@ -50,14 +50,25 @@ module.exports = function(app){
 	/**
 	 * @api {get} /events/:eventId/sessions/list list
 	 * @apiName my api
-	 * @apiGroup Stats
+	 * @apiGroup Sessions
 	 *
 	 * @apiParam {Number} eventId Event unic ID.
 	 *
 	 * @apiSucces {String} returns al sessions of the given event ID.
 	 */
 	app.get('/events/:eventId/sessions/list', apiAuth.checkRequest, sessionsController.list);
-	app.get('/events/:eventId/sessions/:sessionId', apiAuth.checkRequest, function(){});
+
+	/**
+	 * @api {get} /events/:eventId/sessions/:sessionId
+	 * @apiName  my api
+	 * @apiGroup Sessions
+	 *
+	 * @apiParam {Number} eventId Event unic ID.
+	 * @apiParam {Number} sessionId Session unic ID.
+	 *
+	 * @apiSucces {SessionResource} returns a session resourceS.
+	 */
+	app.get('/events/:eventId/sessions/:sessionId', apiAuth.checkRequest, sessionsController.get);
 	//definir parametres opcionals a la ruta de stats
 	//els parametres serien: session, point(idioma) i live | OD
 	//també es pot definir un parametre opcionals per ordenar els resultats

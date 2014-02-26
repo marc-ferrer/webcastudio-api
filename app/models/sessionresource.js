@@ -18,17 +18,6 @@ function SessionResource (config) {
 
 util.inherits(SessionResource, Resource);
 
-SessionResource.get = function(){
-	var connection = mysql.createConnection(mysqlConfig.console);
-	connection.connect(function(err){
-		if (err) {
-			console.log('DB connection error');
-		}
-		// throw err;
-	});
-
-};
-
 var getLiveInfo = function(session, handler){
 	var connectionEventsDB = mysql.createConnection(mysqlConfig.events);
 	connectionEventsDB.connect(function(err){
@@ -93,7 +82,6 @@ SessionResource.list = function(eventId, handler){
 	var sql = 'SELECT '+sessionInfo+'FROM event_part where event_id = ?';
 	connection.query(sql, eventId, function(err, results){
 		//TODO: Check live & OD status.
-		var liveInfo = '';
 		for (var i = 0; i < results.length; i++) {
 			//events DB connection.
 			var session = new SessionResource(results[i]);
@@ -108,6 +96,29 @@ SessionResource.list = function(eventId, handler){
 			});
 		}
 	});
+};
+
+SessionResource.get = function(sessionId, handler){
+	var connection = mysql.createConnection(mysqlConfig.console);
+	connection.connect(function(err){
+		if (err) {
+			console.log('DB connection error');
+		}
+		// throw err;
+	});
+	var sessionInfo = 'part_id as id, name as name, kernel_version as appVersion, theme_id templateId, starting_date as startingDate, finishing_date as finishingDate, event_id as eventId ';
+	var sql = 'SELECT '+sessionInfo+'FROM event_part where part_id = ?';
+	connection.query(sql, sessionId, function(err, results){
+		if (results.length > 0) {
+			var session = new SessionResource(results[0]);
+			getLiveInfo(session, function(session){
+				getOdInfo(connection, session, function(session){
+					handler(session);
+				});
+			});
+		}
+	});
+
 };
 
 module.exports = SessionResource;
