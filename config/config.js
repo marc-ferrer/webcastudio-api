@@ -11,6 +11,13 @@ var config = {
 				user : 'marc',
 				password: 'vancast',
 				database: 'ws_api_test'
+			},
+			events: {
+				host : '127.0.0.1',
+				port: 3306,
+				user : 'marc',
+				password: 'vancast',
+				database: 'ws_api_test'
 			}
 		},
 		mongo: {
