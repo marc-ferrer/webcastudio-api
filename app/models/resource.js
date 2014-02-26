@@ -5,10 +5,10 @@ function Resource () {
 Resource.prototype.toObject = function() {
 	var obj = {};
 	for (var key in this){
-		//prop name that do not start with "_"
-		if (this[key] === undefined || this[key] instanceof Function) {
+		if (this[key] instanceof Function) {
 			continue;
 		};
+		//prop name that do not start with "_"
 		if (/^(?!_.*)/.test(key)) {
 			if (this[key] instanceof Array) {
 				obj[key] = [];
@@ -20,7 +20,9 @@ Resource.prototype.toObject = function() {
 					};
 				};
 			}else{
-				if(this[key].hasOwnProperty('toObject')){
+				if(this[key] === undefined || this[key] === null){
+					this[key] = null;
+				}else if(this[key].hasOwnProperty('toObject')){
 					obj[key] = this[key].toObject();
 				}else{
 					obj[key] = this[key];
