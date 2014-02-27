@@ -34,7 +34,11 @@ exports.checkRequest = function (req, res, next) {
 	}
 	switch(headers['signatureversion']){
 		case 'v1':
-			ClientApp.find(publicKey, function(app){
+			ClientApp.find(publicKey, function(err, app){
+				if (err) {
+					winston.warn('Client App not found', publicKey);
+					res.send(404,'Client App not found');
+				};
 				var now = Date.now();
 				if (now - app.lastRequest > app.period*60*1000) {
 					app.requestCount = 0;

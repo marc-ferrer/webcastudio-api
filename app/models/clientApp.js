@@ -118,8 +118,12 @@ ClientApp.find = function(appKey, handler) {
 	});
 	var sql = 'SELECT * FROM Client_App WHERE app_key = ?';
 	connection.query(sql, appKey, function(err, results){
-		var clientApp = new ClientApp(results[0]);
-		handler(clientApp);
+		if (results === undefined || results.length === 0) {
+			handler(true);
+		}else{
+			var clientApp = new ClientApp(results[0]);
+			handler(false, clientApp);
+		}
 	});
 };
 
