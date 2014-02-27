@@ -69,6 +69,8 @@ module.exports = function(app){
 	 * @apiSucces {SessionResource} returns a session resourceS.
 	 */
 	app.get('/events/:eventId/sessions/:sessionId', apiAuth.checkRequest, sessionsController.get);
+	app.get('/sessions/:sessionId', apiAuth.checkRequest, sessionsController.get);
+	
 	//definir parametres opcionals a la ruta de stats
 	//els parametres serien: session, point(idioma) i live | OD
 	//també es pot definir un parametre opcionals per ordenar els resultats
