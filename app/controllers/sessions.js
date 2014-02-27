@@ -7,12 +7,16 @@ exports.list = function(req, res){
 	if ((scopesConfig.appRoles[req.clientApp.role].bitMask & accesLevel) !== accesLevel){
 		res.send(403, 'This appKey doesn\'t have permission to acces to this information');
 	}
-	SessionResource.list(req.params.eventId, function(err, sessionList){
-		var objs = [];
-		for (var key in sessionList){
-			objs.push(sessionList[key].toObject());
+	SessionResource.list(req.clientApp.accId, req.params.eventId, function(err, sessionList){
+		if(!err){
+			var objs = [];
+			for (var key in sessionList){
+				objs.push(sessionList[key].toObject());
+			}
+			res.json(200, objs);
+		}else{
+			res.send(404, 'Resource not found');
 		}
-		res.json(200, objs);
 	});
 };
 
@@ -21,7 +25,11 @@ exports.get = function(req, res) {
 	if ((scopesConfig.appRoles[req.clientApp.role].bitMask & accesLevel) !== accesLevel){
 		res.send(403, 'This appKey doesn\'t have permission to acces to this information');
 	}
-	SessionResource.get(req.params.sessionId, function(err, result){
-		res.json(200, result.toObject());
+	SessionResource.get(req.clientApp.accId, req.params.sessionId, function(err, result){
+		if (!err) {
+			res.json(200, result.toObject());
+		}else{
+			res.send(404, 'Resource not found');
+		}
 	});
 };

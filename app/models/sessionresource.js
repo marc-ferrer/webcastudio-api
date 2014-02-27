@@ -70,7 +70,7 @@ var getOdInfo = function(connection, session, handler){
 	});
 };
 
-SessionResource.list = function(eventId, handler){
+SessionResource.list = function(accId, eventId, handler){
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
 		if (err) {
@@ -79,37 +79,44 @@ SessionResource.list = function(eventId, handler){
 	});
 	var sessionList = [];
 	var counter = 0;
-	var sessionInfo = 'part_id as id, name as name, kernel_version as appVersion, theme_id as templateId, starting_date as startingDate, finishing_date as finishingDate, event_id as eventId ';
-	var sql = 'SELECT '+sessionInfo+'FROM event_part where event_id = ?';
-	connection.query(sql, eventId, function(err, results){
+	// var sessionInfo = 'part_id as id, name as name, kernel_version as appVersion, theme_id as templateId, starting_date as startingDate, finishing_date as finishingDate, event_id as eventId ';
+	var sessionInfo = 'ep.part_id as id, ep.name as name, ep.kernel_version as appVersion, ep.theme_id as templateId, ep.starting_date as startingDate, ep.finishing_date as finishingDate, ep.event_id as eventId ';
+	var sql = 'SELECT '+sessionInfo+'FROM event_part as ep JOIN event as e USING(event_id) WHERE event_id = ? AND acc_id = ?';
+	connection.query(sql, [eventId, accId], function(err, results){
 		//TODO: Check live & OD status.
-		for (var i = 0; i < results.length; i++) {
-			//events DB connection.
-			var session = new SessionResource(results[i]);
-			sessionList.push(session);
-			getLiveInfo(session, function(session){
-				getOdInfo(connection, session, function(session){
-					counter++;
-					if (counter === results.length) {
-						handler(false, sessionList);
-					}
+		if (results === undefined || results.length === 0) {
+			handler(true);
+		}else{
+			for (var i = 0; i < results.length; i++) {
+				//events DB connection.
+				var session = new SessionResource(results[i]);
+				sessionList.push(session);
+				getLiveInfo(session, function(session){
+					getOdInfo(connection, session, function(session){
+						counter++;
+						if (counter === results.length) {
+							handler(false, sessionList);
+						}
+					});
 				});
-			});
+			}
 		}
 	});
 };
 
-SessionResource.get = function(sessionId, handler){
+SessionResource.get = function(accId, sessionId, handler){
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
 		if (err) {
 			winston.warn('DB connection error');
 		}
 	});
-	var sessionInfo = 'part_id as id, name as name, kernel_version as appVersion, theme_id templateId, starting_date as startingDate, finishing_date as finishingDate, event_id as eventId ';
-	var sql = 'SELECT '+sessionInfo+'FROM event_part where part_id = ?';
-	connection.query(sql, sessionId, function(err, results){
-		if (results.length > 0) {
+	var sessionInfo = 'ep.part_id as id, ep.name as name, ep.kernel_version as appVersion, ep.theme_id as templateId, ep.starting_date as startingDate, ep.finishing_date as finishingDate, ep.event_id as eventId ';
+	var sql = 'SELECT '+sessionInfo+'FROM event_part as ep JOIN event as e USING(event_id) where part_id = ? AND acc_id = ?';
+	connection.query(sql, [sessionId, accId], function(err, results){
+		if (results === undefined || results.length === 0) {
+			handler(true);
+		}else{
 			var session = new SessionResource(results[0]);
 			getLiveInfo(session, function(session){
 				getOdInfo(connection, session, function(session){

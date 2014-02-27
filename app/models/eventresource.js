@@ -31,54 +31,6 @@ EventResource.prototype.addLanguage = function(lang){
 };
 
 /**
- * Get an event resource
- * @param  {Number} event_id Id of the event.
- * @param  {Function} handler  handler function 1 parameter neded.
- * @return {EventResource}     returns the event resource via handler.
- */
-EventResource.get = function(event_id, handler) {
-	var connection = mysql.createConnection(mysqlConfig.console);
-	connection.connect(function(err){
-		if (err) {
-			winston.warn('DB connection error', mysqlConfig.console);
-		}
-	});
-	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, ';
-	var langInfo = 'l.event_point_id as lang_id, l.name as lang_name, l.description as lang_label ';
-	var sql = 'SELECT '+eventInfo+langInfo+'FROM event as e JOIN ws_api_test.event_point as l USING(event_id) WHERE event_id = ?';
-	connection.query(sql, event_id, function(err, result){
-		//TODO: check existance
-		var eventResult = EventResource._parseListResult(result);
-		handler(false, eventResult[0]);
-	});
-};
-
-/**
- * list all events of the given account.
- * @param  {Number} accId   Id of the account.
- * @param  {Function} handler handler function.
- * @return {Array}          Array of EventResources.
- */
-EventResource.list = function(accId, handler) {
-	var connection = mysql.createConnection(mysqlConfig.console);
-	connection.connect(function(err){
-		if (err) {
-			winston.warn('DB connection error');
-		}
-		// throw err;
-	});
-	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, ';
-	var langInfo = 'l.event_point_id as lang_id, l.name as lang_name, l.description as lang_label ';
-	var sql = 'SELECT '+eventInfo+langInfo+'FROM event as e JOIN ws_api_test.event_point as l USING(event_id) WHERE acc_id = ?';
-	connection.query(sql, accId, function(err, results){
-		//create new event resource list with results.
-		var eventResults = EventResource._parseListResult(results);
-		//TODO: implement resourceCollection class with toObject method
-		handler(false, eventResults);
-	});
-};
-
-/**
  * Given a query result array of events, returns an array of event resources.
  * @param  {Array} Results query result array.
  * @return {Array} Array of events resources.
@@ -109,6 +61,64 @@ EventResource._parseListResult = function(results){
 		}	
 	}
 	return eventResults;
+};
+
+/**
+ * Get an event resource
+ * @param  {Number} event_id Id of the event.
+ * @param  {Function} handler  handler function 1 parameter neded.
+ * @return {EventResource}     returns the event resource via handler.
+ */
+EventResource.get = function(accId, event_id, handler) {
+	var connection = mysql.createConnection(mysqlConfig.console);
+	connection.connect(function(err){
+		if (err) {
+			winston.warn('DB connection error', mysqlConfig.console);
+		}
+	});
+	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, e.acc_id as accId, ';
+	var langInfo = 'l.event_point_id as lang_id, l.name as lang_name, l.description as lang_label ';
+	var sql = 'SELECT '+eventInfo+langInfo+'FROM event as e JOIN ws_api_test.event_point as l USING(event_id) WHERE event_id = ?';
+	connection.query(sql, event_id, function(err, result){
+		if (result === undefined || result.length === 0) {
+			handler(true);
+		}else{
+			if (result[0].accId !== accId) {
+				handler(true);
+			}else{
+				var eventResult = EventResource._parseListResult(result);
+				handler(false, eventResult[0]);
+			}
+		}
+	});
+};
+
+/**
+ * list all events of the given account.
+ * @param  {Number} accId   Id of the account.
+ * @param  {Function} handler handler function.
+ * @return {Array}          Array of EventResources.
+ */
+EventResource.list = function(accId, handler) {
+	var connection = mysql.createConnection(mysqlConfig.console);
+	connection.connect(function(err){
+		if (err) {
+			winston.warn('DB connection error');
+		}
+	});
+	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, ';
+	var langInfo = 'l.event_point_id as lang_id, l.name as lang_name, l.description as lang_label ';
+	var sql = 'SELECT '+eventInfo+langInfo+'FROM event as e JOIN ws_api_test.event_point as l USING(event_id) WHERE acc_id = ?';
+	connection.query(sql, accId, function(err, results){
+		if (results === undefined || results.length === 0) {
+			handler(true);
+		}else{
+			//create new event resource list with results.
+			var eventResults = EventResource._parseListResult(results);
+			//TODO: implement resourceCollection class with toObject method
+			handler(false, eventResults);
+		}
+	});
 };
 
 module.exports = EventResource;
