@@ -21,7 +21,7 @@ Resource.prototype.toObject = function() {
 				}
 			}else{
 				if(this[key] === undefined || this[key] === null){
-					this[key] = null;
+					obj[key] = null;
 				}else if(this[key].hasOwnProperty('toObject')){
 					obj[key] = this[key].toObject();
 				}else{
