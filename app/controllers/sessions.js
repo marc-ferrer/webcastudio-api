@@ -10,11 +10,9 @@ exports.list = function(req, res){
 	SessionResource.list(req.params.eventId, function(sessionList){
 		var objs = [];
 		for (var key in sessionList){
-			// console.log(sessionList[key]);
 			objs.push(sessionList[key].toObject());
 		}
-		// res.json(200, objs);
-		res.json(200, sessionList);
+		res.json(200, objs);
 	});
 };
 
