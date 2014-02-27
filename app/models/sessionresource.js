@@ -1,4 +1,5 @@
 var util = require('util'),
+	winston = require('winston'),
 	mysql = require('mysql'),
 	mysqlConfig = require('../../config/config').mySql,
 	Resource = require('../models/resource'),
