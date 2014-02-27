@@ -29,7 +29,7 @@ var getLiveInfo = function(session, handler){
 	var flagInfo = '* ';
 	var sql2 = 'SELECT '+flagInfo+'FROM Webcast_Flags where part_id = ?';
 	connectionEventsDB.query(sql2, session.id, function(err, results){
-		if (results.length > 0) {
+		if (results !== undefined && results.length > 0) {
 			switch (results[0].live_publishing){
 				case 0:
 					session.liveStatus = 'off';
@@ -52,7 +52,7 @@ var getOdInfo = function(connection, session, handler){
 	var odInfo = 'evP.event_point_id, evP.name, evP.channel_code, od.published ';
 	var sql3 = 'SELECT '+odInfo+'FROM On_Demand as od JOIN event_point as evP USING(event_point_id) WHERE part_id = ?';
 	connection.query(sql3, session.id, function(err, result){
-		if (result.length > 0) {
+		if (result !== undefined && result.length > 0) {
 			for (var j = 0; j < result.length; j++) {
 				var obj = {
 					languageId: result[j].event_point_id,
