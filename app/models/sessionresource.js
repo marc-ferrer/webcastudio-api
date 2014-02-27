@@ -22,7 +22,7 @@ var getLiveInfo = function(session, handler){
 	var connectionEventsDB = mysql.createConnection(mysqlConfig.events);
 	connectionEventsDB.connect(function(err){
 		if (err) {
-			console.log('connection to events DB error');
+			winston.warn('connection to events DB error');
 		}
 	});
 	var flagInfo = '* ';
@@ -73,7 +73,7 @@ SessionResource.list = function(eventId, handler){
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
 		if (err) {
-			console.log('DB connection error');
+			winston.warn('DB connection error');
 		}
 	});
 	var sessionList = [];
@@ -102,9 +102,8 @@ SessionResource.get = function(sessionId, handler){
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
 		if (err) {
-			console.log('DB connection error');
+			winston.warn('DB connection error');
 		}
-		// throw err;
 	});
 	var sessionInfo = 'part_id as id, name as name, kernel_version as appVersion, theme_id templateId, starting_date as startingDate, finishing_date as finishingDate, event_id as eventId ';
 	var sql = 'SELECT '+sessionInfo+'FROM event_part where part_id = ?';

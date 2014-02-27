@@ -1,6 +1,7 @@
 var ClientApp = require('../../app/models/clientApp'),
 		SignatureV1 = require('../../app/signatures/signaturev1'),
-		moment = require('moment');
+		moment = require('moment'),
+		winston = require('winston');
 
 /**
  * Checks request headers and signature
@@ -9,12 +10,13 @@ var ClientApp = require('../../app/models/clientApp'),
  * @param  {Function} next next
  */
 exports.checkRequest = function (req, res, next) {
+	winston.info('checking request');
 	var headers = req.headers;
 	var date = headers['date'],
 		publicKey = headers['publickey'],
 		signature = headers['signature'];
 	if ((date == undefined) || (publicKey == undefined) || (signature == undefined)){
-		console.log('Incorrect headers');
+		winston.warn('Incorrect headers');
 		res.send(400,'Incorrect headers');
 	}
 	//checks if date is a number, so it is suposed to be a unix timestamp.
@@ -24,11 +26,11 @@ exports.checkRequest = function (req, res, next) {
 	var nowMoment = moment(),
 		pastMoment = moment(date);
 	if (!pastMoment.isValid()){
-		console.log('bad date format');
+		winston.warn('bad date format');
 		res.send(400, 'bad date format');
 	}
 	if (nowMoment.diff(pastMoment, 'seconds') > 30){
-		console.log('request expired');
+		winston.warn('request expired');
 		res.send(403, 'request expired');
 	}
 	switch(headers['signatureversion']){
@@ -37,7 +39,7 @@ exports.checkRequest = function (req, res, next) {
 				var signatureV1 = new SignatureV1();
 				var signToCheck = signatureV1.generateSignature(publicKey, app.secretKey, date);
 				if(signToCheck !== signature){
-					console.log('Bad signature');
+					winston.warn('Bad signature');
 					res.send(401, 'Bad signature');
 				}else{
 					req.clientApp = app;

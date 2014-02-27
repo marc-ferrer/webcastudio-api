@@ -1,4 +1,5 @@
 var util = require('util'),
+	winston = require('winston'),
 	Resource = require('./resource'),
 	mysql = require('mysql'),
 	mysqlConfig = require('../../config/config').mySql,
@@ -39,9 +40,8 @@ EventResource.get = function(event_id, handler) {
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
 		if (err) {
-			console.log('DB connection error', mysqlConfig.console);
+			winston.warn('DB connection error', mysqlConfig.console);
 		}
-		// throw err;
 	});
 	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, ';
 	var langInfo = 'l.event_point_id as lang_id, l.name as lang_name, l.description as lang_label ';
@@ -62,7 +62,7 @@ EventResource.list = function(accId, handler) {
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
 		if (err) {
-			console.log('DB connection error');
+			winston.warn('DB connection error');
 		}
 		// throw err;
 	});
