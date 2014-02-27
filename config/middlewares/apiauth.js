@@ -10,7 +10,6 @@ var ClientApp = require('../../app/models/clientApp'),
  * @param  {Function} next next
  */
 exports.checkRequest = function (req, res, next) {
-	winston.info('checking request');
 	var headers = req.headers;
 	var date = headers['date'],
 		publicKey = headers['publickey'],
@@ -36,6 +35,16 @@ exports.checkRequest = function (req, res, next) {
 	switch(headers['signatureversion']){
 		case 'v1':
 			ClientApp.find(publicKey, function(app){
+				var now = Date.now();
+				if (now - app.lastRequest > app.period*60*1000) {
+					app.requestCount = 0;
+				};
+				app.lastRequest = now;
+				if (app.requestCount >= app.requestsLimit) {
+					winston.warn('request per period exceeded for app:', app.appId);
+					res.send(401,'Request limit exceeded');
+				}
+				app.requestCount++;
 				var signatureV1 = new SignatureV1();
 				var signToCheck = signatureV1.generateSignature(publicKey, app.secretKey, date);
 				if(signToCheck !== signature){

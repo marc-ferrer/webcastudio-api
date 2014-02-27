@@ -1,4 +1,5 @@
 var crypto = require('crypto'),
+	winston = require('winston'),
 	uid2 = require('uid2'),
 	mysql = require('mysql'),
 	mysqlConfig = require('../../config/config').mySql;
@@ -10,6 +11,9 @@ function ClientApp (config) {
 	this.accId = config.accId || config.acc_id;
 	this.role = config.role;
 	this.createdAt = config.createdAt || config.created_at;
+	this.requestCount = config.requestCount || config.request_count;
+	this.requestLimit = config.requestsLimit || config.requests_limit;
+	this.lastRequest = config.lastRequest || config.last_request;
 }
 
 // AppSchema.statics.register = function(user, role){
@@ -34,6 +38,25 @@ function ClientApp (config) {
 // 		}
 // 	);
 // };
+
+/**
+ * Updates request control information.
+ * 
+ */
+ClientApp.prototype.updateRequestsInfo = function() {
+	var connection = mysql.createConnection(mysqlConfig.console);
+	connection.connect(function(err){
+		if (err) {
+			winston.warn('DB Connection error',err);
+		}
+	});
+	var sql = 'UPDATE Client_App SET request_count = ?, last_request = ?';
+	connection.query(sql, [this.requestCount, this.lastRequest], function(err, result){
+		if (err) {
+			winston.warn('Error updating ClientApp requests info', err);
+		}
+	});
+};
 
 /**
  * generates a secret key.
@@ -65,7 +88,6 @@ ClientApp.register = function(accId, role, psk){
 		if (err) {
 			console.log(err);
 		}
-		// throw err;
 	});
 	var sql = 'INSERT INTO Client_App (app_id, app_key, secret_key, acc_id, role) VALUES (?)';
 	var utcDate = date.toUTCString();
@@ -93,7 +115,6 @@ ClientApp.find = function(appKey, handler) {
 		if (err) {
 			console.log('error:',err);
 		}
-		// throw err;
 	});
 	var sql = 'SELECT * FROM Client_App WHERE app_key = ?';
 	connection.query(sql, appKey, function(err, results){
