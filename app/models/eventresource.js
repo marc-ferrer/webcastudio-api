@@ -73,7 +73,7 @@ EventResource.get = function(accId, event_id, handler) {
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
 		if (err) {
-			winston.warn('DB connection error', mysqlConfig.console);
+			winston.error('DB connection error', err);
 		}
 	});
 	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, e.acc_id as accId, ';
@@ -103,7 +103,7 @@ EventResource.list = function(accId, handler) {
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
 		if (err) {
-			winston.warn('DB connection error');
+			winston.error('DB connection error', err);
 		}
 	});
 	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, ';

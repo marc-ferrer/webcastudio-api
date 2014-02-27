@@ -47,7 +47,7 @@ ClientApp.prototype.updateRequestsInfo = function() {
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
 		if (err) {
-			winston.warn('DB Connection error',err);
+			winston.error('DB Connection error',err);
 		}
 	});
 	var sql = 'UPDATE Client_App SET request_count = ?, last_request = ?';
@@ -86,7 +86,7 @@ ClientApp.register = function(accId, role, psk){
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
 		if (err) {
-			console.log(err);
+			winston.error('DB connection error',err);
 		}
 	});
 	var sql = 'INSERT INTO Client_App (app_id, app_key, secret_key, acc_id, role) VALUES (?)';
@@ -95,7 +95,7 @@ ClientApp.register = function(accId, role, psk){
 	connection.query(sql, values, function(err, result){
 		if (err){
 			//throw err;
-			console.log('Error inserting client app into DB', err);
+			winston.warn('Error inserting client app into DB', err);
 		}
 	});
 	//TODO: returns new ClientApp object.
@@ -113,7 +113,7 @@ ClientApp.find = function(appKey, handler) {
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
 		if (err) {
-			console.log('error:',err);
+			winston.error('DB connection error',err);
 		}
 	});
 	var sql = 'SELECT * FROM Client_App WHERE app_key = ?';
