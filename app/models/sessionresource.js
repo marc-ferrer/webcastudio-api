@@ -79,7 +79,7 @@ SessionResource.list = function(eventId, handler){
 	});
 	var sessionList = [];
 	var counter = 0;
-	var sessionInfo = 'part_id as id, name as name, kernel_version as appVersion, theme_id templateId, starting_date as startingDate, finishing_date as finishingDate, event_id as eventId ';
+	var sessionInfo = 'part_id as id, name as name, kernel_version as appVersion, theme_id as templateId, starting_date as startingDate, finishing_date as finishingDate, event_id as eventId ';
 	var sql = 'SELECT '+sessionInfo+'FROM event_part where event_id = ?';
 	connection.query(sql, eventId, function(err, results){
 		//TODO: Check live & OD status.
@@ -91,7 +91,7 @@ SessionResource.list = function(eventId, handler){
 				getOdInfo(connection, session, function(session){
 					counter++;
 					if (counter === results.length) {
-						handler(sessionList);
+						handler(false, sessionList);
 					}
 				});
 			});
@@ -113,7 +113,7 @@ SessionResource.get = function(sessionId, handler){
 			var session = new SessionResource(results[0]);
 			getLiveInfo(session, function(session){
 				getOdInfo(connection, session, function(session){
-					handler(session);
+					handler(false, session);
 				});
 			});
 		}

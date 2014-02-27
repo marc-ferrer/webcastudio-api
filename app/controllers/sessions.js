@@ -7,7 +7,7 @@ exports.list = function(req, res){
 	if ((scopesConfig.appRoles[req.clientApp.role].bitMask & accesLevel) !== accesLevel){
 		res.send(403, 'This appKey doesn\'t have permission to acces to this information');
 	}
-	SessionResource.list(req.params.eventId, function(sessionList){
+	SessionResource.list(req.params.eventId, function(err, sessionList){
 		var objs = [];
 		for (var key in sessionList){
 			objs.push(sessionList[key].toObject());
@@ -21,7 +21,7 @@ exports.get = function(req, res) {
 	if ((scopesConfig.appRoles[req.clientApp.role].bitMask & accesLevel) !== accesLevel){
 		res.send(403, 'This appKey doesn\'t have permission to acces to this information');
 	}
-	SessionResource.get(req.params.sessionId, function(result){
+	SessionResource.get(req.params.sessionId, function(err, result){
 		res.json(200, result.toObject());
 	});
 };

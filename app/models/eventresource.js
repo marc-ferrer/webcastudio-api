@@ -47,8 +47,9 @@ EventResource.get = function(event_id, handler) {
 	var langInfo = 'l.event_point_id as lang_id, l.name as lang_name, l.description as lang_label ';
 	var sql = 'SELECT '+eventInfo+langInfo+'FROM event as e JOIN ws_api_test.event_point as l USING(event_id) WHERE event_id = ?';
 	connection.query(sql, event_id, function(err, result){
+		//TODO: check existance
 		var eventResult = EventResource._parseListResult(result);
-		handler(eventResult[0]);
+		handler(false, eventResult[0]);
 	});
 };
 
@@ -73,7 +74,7 @@ EventResource.list = function(accId, handler) {
 		//create new event resource list with results.
 		var eventResults = EventResource._parseListResult(results);
 		//TODO: implement resourceCollection class with toObject method
-		handler(eventResults);
+		handler(false, eventResults);
 	});
 };
 
