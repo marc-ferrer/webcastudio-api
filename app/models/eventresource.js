@@ -69,7 +69,7 @@ EventResource._parseListResult = function(results){
  * @param  {Function} handler  handler function 1 parameter neded.
  * @return {EventResource}     returns the event resource via handler.
  */
-EventResource.get = function(accId, event_id, handler) {
+EventResource.get = function(accId, eventId, handler) {
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
 		if (err) {
@@ -79,7 +79,7 @@ EventResource.get = function(accId, event_id, handler) {
 	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, e.acc_id as accId, ';
 	var langInfo = 'l.event_point_id as lang_id, l.name as lang_name, l.description as lang_label ';
 	var sql = 'SELECT '+eventInfo+langInfo+'FROM event as e JOIN ws_api_test.event_point as l USING(event_id) WHERE event_id = ?';
-	connection.query(sql, event_id, function(err, result){
+	connection.query(sql, eventId, function(err, result){
 		if (result === undefined || result.length === 0) {
 			handler(true);
 		}else{
