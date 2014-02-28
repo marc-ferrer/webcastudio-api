@@ -18,7 +18,15 @@ var config = {
 				user : 'marc',
 				password: 'vancast',
 				database: 'ws_api_test'
+			},
+			pull: {
+				host : '127.0.0.1',
+				port: 3306,
+				user : 'marc',
+				password: 'vancast',
+				database: 'ws_api_test'
 			}
+
 		},
 		mongo: {
 			db: 'mongodb://admin:vancast@troup.mongohq.com:10060/ws-api'
@@ -34,6 +42,20 @@ var config = {
 		mySql: {
 			console: {
 				host : 'localhost',
+				user : 'marc',
+				password: 'vancast',
+				database: 'ws_api_test'
+			},
+			events: {
+				host : '127.0.0.1',
+				port: 3306,
+				user : 'marc',
+				password: 'vancast',
+				database: 'ws_api_test'
+			},
+			pull: {
+				host : '127.0.0.1',
+				port: 3306,
 				user : 'marc',
 				password: 'vancast',
 				database: 'ws_api_test'
@@ -57,6 +79,12 @@ var config = {
 				password: process.env.DB_CONSOLE_PASS || '',
 				database: process.env.DB_CONSOLE_SCHEMA || 'ws_api_test'
 			},
+			events: {
+        host : process.env.DB_PULL_HOST || 'localhost',
+        user : process.env.DB_PULL_USER || 'root',
+        password: process.env.DB_PULL_PASS || '',
+        database: process.env.DB_PULL_SCHEMA || 'ws_api_test'
+      },
       pull: {
         host : process.env.DB_PULL_HOST || 'localhost',
         user : process.env.DB_PULL_USER || 'root',
