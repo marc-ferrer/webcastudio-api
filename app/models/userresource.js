@@ -19,11 +19,13 @@ UserResource.get = function(uid, handler){
 	eventsConnection.connect(function(err){
 		if (err) {
 			winston.error('DB connection error', err);
+			handler(true);
 		}
 	});
-	var userSql = 'SELECT email, firstname, secondname, organization FROM User WHERE uid = ?';
+	var userSql = 'SELECT uid, email, firstname, secondname, organization FROM User WHERE uid = ?';
 	eventsConnection.query(userSql, uid, function(err, result){
 		if (result === undefined || result.length === 0) {
+			winston.warn('user not found', uid);
 			handler(true);
 		}else{
 			var user = new UserResource(result[0]);

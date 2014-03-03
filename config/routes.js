@@ -2,7 +2,8 @@ module.exports = function(app){
 
 	var apiAuth = require('./middlewares/apiauth'),
 			eventsController = require('../app/controllers/events'),
-			sessionsController = require('../app/controllers/sessions');
+			sessionsController = require('../app/controllers/sessions'),
+			statsController = require('../app/controllers/stats');
 
 	//TODO: uncomment when create app api feature is ready
 	// app.get('/createapp', userAuth.isAuthenticatedUser, createapp.createApp);
@@ -45,7 +46,7 @@ module.exports = function(app){
 	 * @apiSuccess {stats_resource} result returns event statistics.
 	 *
 	 */
-	app.get('/events/:eventId/stats', apiAuth.checkRequest, function(){});
+	app.get('/events/:eventId/stats', apiAuth.checkRequest, statsController.list);
 
 	/**
 	 * @api {get} /events/:eventId/sessions/list list
