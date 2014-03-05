@@ -21,8 +21,8 @@ function setUrl (options, eventId, appId, langId) {
 	if (options.sessionId !== undefined) {
 		additionalParams += '&p='+options.sessionId;
 	}
-	//TODO: set Key.
-	var hmac = crypto.createHmac('sha1', 'Key');
+	var key = 'q2ad5rD';
+	var hmac = crypto.createHmac('sha1', key);
 	hmac.setEncoding('base64');
 	hmac.write(eventId+appId);
 	hmac.end();
