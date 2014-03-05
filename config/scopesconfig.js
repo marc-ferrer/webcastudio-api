@@ -8,12 +8,14 @@ var config = {
 		'SESSION_WRITE': 32,
 		'STATS_READ': 64,
 		'STATS_WRITE': 128,
-		'APPS_READ': 256,
-		'APPS_WRITE': 512
+		'ACCESS_READ': 256,
+		'ACCESS_WRITE': 512,
+		'APPS_READ': 1024,
+		'APPS_WRITE': 2048
 	},
 	roles : {
 		'APPS_MANAGER': ['APPS_READ', 'APPS_WRITE'],
-		'STANDARD': ['EVENT_READ', 'SESSION_READ', 'STATS_READ']
+		'STANDARD': ['EVENT_READ', 'SESSION_READ', 'STATS_READ', 'ACCESS_READ']
 	}
 };
 module.exports.scopes = config.scopes;
