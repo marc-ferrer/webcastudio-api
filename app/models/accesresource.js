@@ -14,6 +14,13 @@ function AccesResource (config) {
 
 util.inherits(AccesResource, Resource);
 
+/**
+ * generates access URL
+ * @param {Object} url generation options, (protocol, domain, sessionId)
+ * @param {Number} eventId Event Id
+ * @param {Number} appId   application Id, (Id of the acces method)
+ * @param {Number} langId  Language Id (event_point_id)
+ */
 function setUrl (options, eventId, appId, langId) {
 	var url = '';
 	url = options.protocol+'://'+options.domain+'/event/?e='+eventId+'&a='+appId;
@@ -30,6 +37,15 @@ function setUrl (options, eventId, appId, langId) {
 	return url += additionalParams+token;
 }
 
+/**
+ * List all access methods available for the given event. Provides the url for each acces & language.
+ * if sessionId is provided in options the urls point to that specific session.
+ * @param  {Number} accId   Account id
+ * @param  {Number} eventId event id
+ * @param  {Object} options (protocol, domain, sessionId)
+ * @param  {Function} handler Handler function
+ * @return {Array}         Returns an AccessResource list
+ */
 AccesResource.list = function(accId, eventId, options, handler){
 	if (options instanceof Function) {
 		handler = options;

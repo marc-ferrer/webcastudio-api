@@ -46,32 +46,3 @@ function buildAppScopes(scopes, roles){
 	}
 	return appRoles;
 };
-
-
-//accesLevel = scopes.ACCOUNT_READ + scopes.EVENT_WRITE etc.
-	//clientApp.access = scopes.X + scopes.Y + scopes.Z
-	//auth = client.acces & accesLevel
-	//grant if auth === accesLevel
-
-//module.exports.roles = roles;
-
-
-
-//Program 
-
-/*var scopes = require('rolesConfig').scopes
-, appRoles = require('rolesConfig').appRoles;
-
-var clientApp = {
-	accId = 6,
-	appKey = 'jjjjjj',
-	appSecret = 'lllklkkl',
-	role = 'ADMIN'
-};
-
-var routeLevel = socpes.EVENTS_READ;
-var clientAccess = appRoles[clientApp.role].bitMask;
-var access = routeLevel & clientAccess;
-if(access !== routeLevel){
-	return res.send(401);
-}*/

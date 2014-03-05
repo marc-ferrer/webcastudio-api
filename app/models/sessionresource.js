@@ -19,6 +19,12 @@ function SessionResource (config) {
 
 util.inherits(SessionResource, Resource);
 
+/**
+ * Get live status information
+ * @param  {SessionResource} session 
+ * @param  {Function} handler Handler function
+ * @return {SessionResource}         returns the same SessionResource with new livestatus info
+ */
 var getLiveInfo = function(session, handler){
 	var connectionEventsDB = mysql.createConnection(mysqlConfig.events);
 	connectionEventsDB.connect(function(err){
@@ -48,6 +54,13 @@ var getLiveInfo = function(session, handler){
 	});
 };
 
+/**
+ * Get on Demand information.
+ * @param  {Object} connection MySql connection
+ * @param  {SessionResource} session    
+ * @param  {Function} handler    Handler function
+ * @return {SessionResource}            returns the same SessionResource with new OD info.
+ */
 var getOdInfo = function(connection, session, handler){
 	var odInfo = 'evP.event_point_id, evP.name, evP.channel_code, od.published ';
 	var sql3 = 'SELECT '+odInfo+'FROM On_Demand as od JOIN event_point as evP USING(event_point_id) WHERE part_id = ?';
@@ -70,6 +83,13 @@ var getOdInfo = function(connection, session, handler){
 	});
 };
 
+/**
+ * List all sessions of the given event.
+ * @param  {Number} accId   Account id
+ * @param  {Number} eventId Event Id
+ * @param  {Function} handler Handler function
+ * @return {Array}         Session resource list
+ */
 SessionResource.list = function(accId, eventId, handler){
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){
@@ -104,6 +124,13 @@ SessionResource.list = function(accId, eventId, handler){
 	});
 };
 
+/**
+ * Get session info.
+ * @param  {Number} accId     Account Id
+ * @param  {Number} sessionId Session Id
+ * @param  {Function} handler   Handler function
+ * @return {SessionResource}           returns the session info
+ */
 SessionResource.get = function(accId, sessionId, handler){
 	var connection = mysql.createConnection(mysqlConfig.console);
 	connection.connect(function(err){

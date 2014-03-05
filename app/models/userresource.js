@@ -14,6 +14,12 @@ function UserResource (config) {
 
 util.inherits(UserResource, Resource);
 
+/**
+ * Get Audience user info.
+ * @param  {Number} uid     User unic Id
+ * @param  {Function} handler Handler function
+ * @return {UserResource}         UserResource
+ */
 UserResource.get = function(uid, handler){
 	var eventsConnection = mysql.createConnection(mysqlConfig.events);
 	eventsConnection.connect(function(err){

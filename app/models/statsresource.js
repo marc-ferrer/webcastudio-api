@@ -20,6 +20,14 @@ function StatsResource (config) {
 
 util.inherits(StatsResource, Resource);
 
+/**
+ * Get Audience log information
+ * @param  {Object} connection MySql connection
+ * @param  {Object} users      Key => Value array of User resource (User info of the audience)
+ * @param  {Number} eventId    Event Id
+ * @param  {Function} handler    Handler function
+ * @return {Array}            StatsResource list.
+ */
 function getAudienceLogs(connection, users, eventId, handler){
 	var sql = 'SELECT * FROM Audience_Log WHERE event_id = ?';
 	connection.query(sql, eventId, function(err, results){
