@@ -30,11 +30,13 @@ function setUrl (options, eventId, appId, langId) {
 	}
 	var key = 'q2ad5rD';
 	var hmac = crypto.createHmac('sha1', key);
-	hmac.setEncoding('base64');
+	hmac.setEncoding('hex');
 	hmac.write(eventId+appId);
 	hmac.end();
-	var token = '&t=' + hmac.read();
-	return url += additionalParams+token;
+	var token_hex = hmac.read().toString();
+	var token64_buff = new Buffer(token_hex);
+	var token = '&t=' + token64_buff.toString('base64');
+	return url += token+additionalParams;
 }
 
 /**
