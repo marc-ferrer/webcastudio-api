@@ -74,6 +74,7 @@ EventResource.get = function(accId, eventId, handler) {
 	connection.connect(function(err){
 		if (err) {
 			winston.error('DB connection error', err);
+			handler(true);
 		}
 	});
 	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, e.acc_id as accId, ';
@@ -104,6 +105,7 @@ EventResource.list = function(accId, handler) {
 	connection.connect(function(err){
 		if (err) {
 			winston.error('DB connection error', err);
+			handler(true);
 		}
 	});
 	var eventInfo = 'e.event_id as id, e.long_name as name, e.description, e.starting_date, e.finishing_date, e.status, ';
