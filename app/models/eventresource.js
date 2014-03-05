@@ -82,9 +82,11 @@ EventResource.get = function(accId, eventId, handler) {
 	var sql = 'SELECT '+eventInfo+langInfo+'FROM event as e JOIN event_point as l USING(event_id) WHERE event_id = ?';
 	connection.query(sql, eventId, function(err, result){
 		if (result === undefined || result.length === 0) {
+			winston.info('Not found, query results = undefined or 0');
 			handler(true);
 		}else{
 			if (result[0].accId !== accId) {
+				winston.warn('permission denyied');
 				handler(true);
 			}else{
 				var eventResult = EventResource._parseListResult(result);
@@ -113,6 +115,7 @@ EventResource.list = function(accId, handler) {
 	var sql = 'SELECT '+eventInfo+langInfo+'FROM event as e JOIN event_point as l USING(event_id) WHERE acc_id = ?';
 	connection.query(sql, accId, function(err, results){
 		if (results === undefined || results.length === 0) {
+			winston.info('Not found, query results = undefined or 0 or permission denyied');
 			handler(true);
 		}else{
 			//create new event resource list with results.
