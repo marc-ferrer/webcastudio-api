@@ -14,6 +14,7 @@ function ClientApp (config) {
 	this.requestCount = config.requestCount || config.request_count;
 	this.requestLimit = config.requestsLimit || config.requests_limit;
 	this.lastRequest = config.lastRequest || config.last_request;
+	this.domain = config.domain
 }
 
 // AppSchema.statics.register = function(user, role){
