@@ -3,7 +3,8 @@ module.exports = function(app){
 	var apiAuth = require('./middlewares/apiauth'),
 			eventsController = require('../app/controllers/events'),
 			sessionsController = require('../app/controllers/sessions'),
-			statsController = require('../app/controllers/stats');
+			statsController = require('../app/controllers/stats'),
+			accessController = require('../app/controllers/access');
 
 	//TODO: uncomment when create app api feature is ready
 	// app.get('/createapp', userAuth.isAuthenticatedUser, createapp.createApp);
@@ -47,6 +48,17 @@ module.exports = function(app){
 	 *
 	 */
 	app.get('/events/:eventId/stats', apiAuth.checkRequest, statsController.list);
+
+	/**
+	 * @api {get} /events/:eventId/access/list
+	 * @apiName api
+	 * @apiGroup Access
+	 *
+	 * @apiParam {Number} eventId Event unic ID.
+	 *
+	 * @apiSuccess {accessResource} returns access resource list.
+	 */
+	app.get('/events/:eventId/access/list', apiAuth.checkRequest, accessController.list);
 
 	/**
 	 * @api {get} /events/:eventId/sessions/list list
