@@ -14,31 +14,8 @@ function ClientApp (config) {
 	this.requestCount = config.requestCount || config.request_count;
 	this.requestLimit = config.requestsLimit || config.requests_limit;
 	this.lastRequest = config.lastRequest || config.last_request;
-	this.domain = config.domain
+	this.domain = config.domain;
 }
-
-// AppSchema.statics.register = function(user, role){
-// 	var ClientApp = this;
-// 	//TODO: abstract generate secret process
-// 	var uid = uid2(16);
-// 	var date = new Date();
-// 	var stringToHash = user.hash+user.email+date;
-// 	hash = crypto.createHash('sha1').update(stringToHash + uid).digest('hex');
-// 	console.log('clientApp Id: ', uid);
-// 	console.log('clientApp Secret: ', hash);
-
-// 	ClientApp.create({
-// 		appId			: uid,
-// 		appSecret	: hash,
-// 		accId			: user.email,
-// 		role			: role},
-// 		function(err, user){
-// 			if(err){
-// 				throw err;
-// 			}
-// 		}
-// 	);
-// };
 
 /**
  * Updates request control information.
