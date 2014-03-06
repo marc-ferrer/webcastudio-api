@@ -1,6 +1,7 @@
 var assert = require('assert'),
 		should = require('should'),
-		mocks = require('./mocks.js')
+		mocks = require('./mocks.js'),
+		urlUtils = require('../app/util/urlutils'),
 		EventResource = require('../app/models/eventresource'),
 		LanguageResource = require('../app/models/languageresource'),
 		SignatureV1 = require('../app/signatures/signaturev1.js');
@@ -49,5 +50,19 @@ describe('Resources tests', function () {
 		list[0].should.have.property('toObject');
 		list[0].languages.should.be.instanceOf(Array);
 		list[0].languages[0].should.be.instanceOf(LanguageResource);
+	});
+});
+
+describe('access url token generation', function () {
+	var options = {
+		protocol: 'https',
+		domain: 'vancast.webcasting-studio.net'
+	}
+	var eventId = '788',
+		appId = '5',
+		sessionId = 985;
+	it('should equal https://vancast.webcasting-studio.net/event/?e=788&a=5&t=YjljNDQzMDRiMmM4ZTY3MTliNmI2NDMyY2U3OTMzMzBlNDVlNjEwMg==&pt=985', function () {
+		var url = urlUtils.setUrl(options, eventId, appId, sessionId);
+		url.should.equal('https://vancast.webcasting-studio.net/event/?e=788&a=5&t=YjljNDQzMDRiMmM4ZTY3MTliNmI2NDMyY2U3OTMzMzBlNDVlNjEwMg==&pt=985');
 	});
 });
