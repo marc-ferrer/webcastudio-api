@@ -3,6 +3,7 @@ var path = require('path'),
 		env = process.env.NODE_ENV || 'development';
 
 var config = {
+	REQ_EXPIRATION: 30,
 	development: {
 		mySql: {
 			console: {
