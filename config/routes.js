@@ -12,14 +12,11 @@ module.exports = function(app){
 	// app.post('/createapp', userAuth.isAuthenticatedUser, createapp.registerApp);
 
 
-	//TODO: Apps manager API
-	app.get('/apps/create/:accId/:role', apiAuth.checkRequest, apps.create);
-	app.post('/apps/create/:accId/:role', apiAuth.checkRequest, apps.postCreate);
+	//Apps manager API
+	app.post('/accounts/:accId/apps/new', apiAuth.checkRequest, apps.create);
+	app.get('/accounts/:accId/apps/list', apiAuth.checkRequest, apps.list);
+	app.get('/accounts/:accId/apps/:appKey', apiAuth.checkRequest, apps.get);
 	app.get('/apps/roles/list', apiAuth.checkRequest, apps.listRoles);
-	app.get('/apps/:accId/list', apiAuth.checkRequest, apps.list);
-	/*app.post('/apps/new', apiAuth.checkRequest, controller);
-	app.post('/apps/:appId', apiAuth.checkRequest, controller);*/
-
 
 	/**
 	 * @api {get} /events/list list

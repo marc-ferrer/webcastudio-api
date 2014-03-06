@@ -6,7 +6,7 @@ exports.create = function (req, res) {
 	if ((scopesConfig.appRoles[req.clientApp.role].bitMask & accesLevel) !== accesLevel){
 		res.send(403, 'This appKey doesn\'t have permission to acces to this information');
 	}
-	ClientApp.register('test2', req.params.accId, req.params.role, req.query.psk, function(err, clientApp){
+	ClientApp.register(req.body.name, req.params.accId, req.body.role, req.body.psk, function(err, clientApp){
 		if (err) {
 			console.log(err);
 			res.send(500);
@@ -17,23 +17,18 @@ exports.create = function (req, res) {
 	console.log('apps create');
 };
 
-exports.postCreate = function (req, res) {
-	var accesLevel = scopesConfig.scopes.APPS_WRITE;
+exports.get = function(req, res){
+	var accesLevel = scopesConfig.scopes.APPS_READ;
 	if ((scopesConfig.appRoles[req.clientApp.role].bitMask & accesLevel) !== accesLevel){
 		res.send(403, 'This appKey doesn\'t have permission to acces to this information');
 	}
-	console.log('request query', req.query);
-	console.log('request params', req.params);
-	console.log('request body', req.body);
-	ClientApp.register('test2', req.params.accId, req.params.role, req.query.psk, function(err, clientApp){
+	ClientApp.find(req.params.appKey, function(err, clientApp){
 		if (err) {
-			console.log(err);
-			res.send(500);
+			res.send(500); //500?
 		}else{
-			res.send(200, 'app registered');
+			res.json(200, clientApp);
 		}
 	});
-	console.log('apps create');
 };
 
 exports.list = function(req, res){
