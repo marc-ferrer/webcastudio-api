@@ -1,5 +1,6 @@
 var util = require('util'),
 	crypto = require('crypto'),
+	urlUtils = require('../util/urlutils'),
 	winston = require('winston'),
 	Resource = require('./resource'),
 	mysql = require('mysql'),
@@ -13,31 +14,6 @@ function AccesResource (config) {
 }
 
 util.inherits(AccesResource, Resource);
-
-/**
- * generates access URL
- * @param {Object} url generation options, (protocol, domain, sessionId)
- * @param {Number} eventId Event Id
- * @param {Number} appId   application Id, (Id of the acces method)
- * @param {Number} langId  Language Id (event_point_id)
- */
-function setUrl (options, eventId, appId, langId) {
-	var url = '';
-	url = options.protocol+'://'+options.domain+'/event/?e='+eventId+'&a='+appId;
-	var additionalParams = '&pt='+langId;
-	if (options.sessionId !== undefined) {
-		additionalParams += '&p='+options.sessionId;
-	}
-	var key = 'q2ad5rD';
-	var hmac = crypto.createHmac('sha1', key);
-	hmac.setEncoding('hex');
-	hmac.write(eventId+appId);
-	hmac.end();
-	var token_hex = hmac.read().toString();
-	var token64_buff = new Buffer(token_hex);
-	var token = '&t=' + token64_buff.toString('base64');
-	return url += token+additionalParams;
-}
 
 /**
  * List all access methods available for the given event. Provides the url for each acces & language.
@@ -80,7 +56,7 @@ AccesResource.list = function(accId, eventId, options, handler){
 								name: results[i].lName,
 								url: '' //generate URL
 							};
-							obj.url = setUrl(options, eventId, access.id, obj.langId);
+							obj.url = urlUtils.setUrl(options, eventId, access.id, obj.langId);
 							access.url.push(obj);
 							accesList[results[i].app_id] = access;
 						}else{
@@ -89,7 +65,7 @@ AccesResource.list = function(accId, eventId, options, handler){
 								name: results[i].lName,
 								url: '' //generate URL
 							};
-							obj.url = setUrl(options, eventId, results[i].app_id, obj.langId);
+							obj.url = urlUtils.setUrl(options, eventId, results[i].app_id, obj.langId);
 							accesList[results[i].app_id].url.push(obj);
 						}
 					}
