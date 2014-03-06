@@ -4,7 +4,8 @@ module.exports = function(app){
 			eventsController = require('../app/controllers/events'),
 			sessionsController = require('../app/controllers/sessions'),
 			statsController = require('../app/controllers/stats'),
-			accessController = require('../app/controllers/access');
+			accessController = require('../app/controllers/access'),
+			apps = require('../app/controllers/apps');
 
 	//TODO: uncomment when create app api feature is ready
 	// app.get('/createapp', userAuth.isAuthenticatedUser, createapp.createApp);
@@ -12,9 +13,11 @@ module.exports = function(app){
 
 
 	//TODO: Apps manager API
+	app.get('/apps/create/:accId/:role', apiAuth.checkRequest, apps.create);
+	app.post('/apps/create/:accId/:role', apiAuth.checkRequest, apps.postCreate);
+	app.get('/apps/roles/list', apiAuth.checkRequest, apps.listRoles);
+	app.get('/apps/:accId/list', apiAuth.checkRequest, apps.list);
 	/*app.post('/apps/new', apiAuth.checkRequest, controller);
-	app.get('/apps/list', apiAuth.checkRequest, controller);
-	app.get('/apps/roles/list', apiAuth.checkRequest, controller);
 	app.post('/apps/:appId', apiAuth.checkRequest, controller);*/
 
 

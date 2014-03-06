@@ -5,6 +5,7 @@ var crypto = require('crypto'),
 	mysqlConfig = require('../../config/config').mySql;
 
 function ClientApp (config) {
+	this.name = config.name;
 	this.appId = config.appId || config.app_id;
 	this.appKey = config.appKey || config.app_key;
 	this.secretKey = config.secretKey || config.secret_key;
@@ -28,8 +29,8 @@ ClientApp.prototype.updateRequestsInfo = function() {
 			winston.error('DB Connection error',err);
 		}
 	});
-	var sql = 'UPDATE Client_App SET request_count = ?, last_request = ?';
-	connection.query(sql, [this.requestCount, this.lastRequest], function(err, result){
+	var sql = 'UPDATE Client_App SET request_count = ?, last_request = ? WHERE app_id = ?';
+	connection.query(sql, [this.requestCount, this.lastRequest, this.appId], function(err, result){
 		if (err) {
 			winston.warn('Error updating ClientApp requests info', err);
 		}
@@ -57,7 +58,7 @@ ClientApp._generateSecret = function(uid, psk){
  * @param  {Strign} psk   optional parameter that can be used to encrypt the generated Key.
  * @return {ClientApp}    Client App registered.
  */
-ClientApp.register = function(accId, role, psk){
+ClientApp.register = function(name, accId, role, psk, handler){
 	var uid = uid2(16);
 	var date = new Date();
 	var secret = ClientApp._generateSecret(uid ,psk);
@@ -67,13 +68,16 @@ ClientApp.register = function(accId, role, psk){
 			winston.error('DB connection error',err);
 		}
 	});
-	var sql = 'INSERT INTO Client_App (app_id, app_key, secret_key, acc_id, role) VALUES (?)';
+	var sql = 'INSERT INTO Client_App (name, app_key, secret_key, acc_id, role, created_at) VALUES (?,?,?,?,?,?)';
 	var utcDate = date.toUTCString();
-	var values = [uid, secret, accId, role, utcDate];
+	var values = [name, uid, secret, accId, role, utcDate];
 	connection.query(sql, values, function(err, result){
 		if (err){
 			//throw err;
 			winston.warn('Error inserting client app into DB', err);
+		}else{
+			winston.info(result);
+			handler(false, '');
 		}
 	});
 	//TODO: returns new ClientApp object.
@@ -92,6 +96,7 @@ ClientApp.find = function(appKey, handler) {
 	connection.connect(function(err){
 		if (err) {
 			winston.error('DB connection error',err);
+			handler(true);
 		}
 	});
 	var sql = 'SELECT * FROM Client_App WHERE app_key = ?';
@@ -101,6 +106,30 @@ ClientApp.find = function(appKey, handler) {
 		}else{
 			var clientApp = new ClientApp(results[0]);
 			handler(false, clientApp);
+		}
+	});
+};
+
+ClientApp.list = function(accId, handler){
+	var connection = mysql.createConnection(mysqlConfig.console);
+	connection.connect(function(err){
+		if (err) {
+			winston.error('DB connection error',err);
+			handler(true);
+		}
+	});
+	var sql = 'SELECT * FROM Client_App WHERE acc_id = ?';
+	connection.query(sql, accId, function(err, results){
+		if (results === undefined || results.length === 0) {
+			winston.warn('no client apps available for this account.');
+			handler(true);
+		}else{
+			var list = [];
+			for (var i = 0; i < results.length; i++) {
+				var clientApp = new ClientApp(results[i]);
+				list.push(clientApp);
+			}
+			handler(false, list);
 		}
 	});
 };

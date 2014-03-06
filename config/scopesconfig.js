@@ -19,6 +19,7 @@ var config = {
 	}
 };
 module.exports.scopes = config.scopes;
+module.exports.roles = config.roles;
 module.exports.appRoles = buildAppScopes(config.scopes, config.roles);
 
 function buildAppScopes(scopes, roles){
