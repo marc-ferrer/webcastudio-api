@@ -45,7 +45,7 @@ exports.list = function(req, res){
 		if (err) {
 			res.send(500); //500?
 		}else{
-			res.send(200, list);
+			res.json(200, list);
 		}
 	});
 };
@@ -56,5 +56,5 @@ exports.listRoles = function(req, res){
 	if ((scopesConfig.appRoles[req.clientApp.role].bitMask & accesLevel) !== accesLevel){
 		res.send(403, 'This appKey doesn\'t have permission to acces to this information');
 	}
-	res.send(200, scopesConfig.roles);
+	res.json(200, scopesConfig.roles);
 };
