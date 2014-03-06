@@ -1,7 +1,8 @@
 var ClientApp = require('../../app/models/clientApp'),
 		SignatureV1 = require('../../app/signatures/signaturev1'),
 		moment = require('moment'),
-		winston = require('winston');
+		winston = require('winston'),
+		config = require('../config');
 
 /**
  * Checks request headers and signature
@@ -28,7 +29,7 @@ exports.checkRequest = function (req, res, next) {
 		winston.warn('bad date format');
 		res.send(400, 'bad date format');
 	}
-	if (nowMoment.diff(pastMoment, 'seconds') > 30){
+	if (nowMoment.diff(pastMoment, 'seconds') > config.REQ_EXPIRATION){
 		winston.warn('request expired');
 		res.send(403, 'request expired');
 	}
