@@ -3,7 +3,6 @@ var resources = require('../models/resource'),
 	scopesConfig = require('../../config/scopesconfig');
 
 exports.list = function(req, res){
-	req.clientApp.updateRequestsInfo();
 	var accesLevel = scopesConfig.scopes.EVENT_READ;
 	if ((scopesConfig.appRoles[req.clientApp.role].bitMask & accesLevel) !== accesLevel){
 		res.send(403, 'This appKey doesn\'t have permission to acces to this information');

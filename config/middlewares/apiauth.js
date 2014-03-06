@@ -56,6 +56,7 @@ exports.checkRequest = function (req, res, next) {
 					res.send(401, 'Bad signature');
 				}else{
 					req.clientApp = app;
+					app.updateRequestsInfo();
 					next();
 				}
 			});
