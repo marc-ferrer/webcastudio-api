@@ -1,4 +1,6 @@
 var crypto = require('crypto'),
+	util = require('util'),
+	Resource = require('../models/resource'),
 	winston = require('winston'),
 	uid2 = require('uid2'),
 	mysql = require('mysql'),
@@ -17,6 +19,8 @@ function ClientApp (config) {
 	this.lastRequest = config.lastRequest || config.last_request;
 	this.domain = config.domain;
 }
+
+util.inherits(ClientApp, Resource);
 
 /**
  * Updates request control information.
